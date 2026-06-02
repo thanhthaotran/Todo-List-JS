@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách công việc</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body{
+             /*Cho khung vào giữa*/
+            background-color: pink;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        
+        .khung{
+            width: 350px;
+            padding:10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            background-color: white;
+            border-radius: 15px;
+        }
+
+        .tieude{
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .add{
+            width: 200px;
+            padding:10px;
+            border-radius: 15px;
+            background-color: white;
+            color:black;
+        }
+
+        button.add{
+            width:50px;
+            padding: 10px;
+            border-radius: 15px;
+            background-color: pink;
+            border:none;
+            cursor: pointer;
+        }
+
+        button.add:hover{
+            background-color: white;
+            font-weight: bold;
+        }
+
+        .cv{
+            width:250px;
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+        .khung2{
+            display:flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .khung3{
+            display:flex;
+            gap: 10px;
+        }
+
+        .list{
+            display:flex;
+            flex-direction:column;
+            gap:10px;   
+        }
+
+        .khungds{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            background:pink;
+            padding:10px;
+            border-radius:10px;
+            margin-top:10px;
+            width:310px;
+            margin-left:10px;
+        }
+
+        button.de{
+            border:none;
+            cursor: pointer;
+            border-radius: 15px;
+            padding:5px;
+            font-size:16px;
+        }
+
+        button.de:hover{
+            background-color: pink;
+            font-weight: bold;
+        }
+
+        p{
+            margin-left:10px
+        }
+
+        button.ClearAll{
+            border:none;
+            cursor: pointer;
+            border-radius: 15px;
+            margin-top:10px;
+            padding:10px;
+            margin-left:150px;
+            background-color: pink;
+            cursor: pointer;
+        }
+
+        button.ClearAll:hover{
+            background-color: white;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+
+<body>
+    <div class="khung">
+        <p class="tieude"> Todo List </p>
+        <div class="khung2">
+            <input type="text" class="cv" placeholder="Nhập tên công việc">
+            <button class="add">+</button>
+        </div>
+
+        <div class="list"> </div>
+
+        <div class="khung3">
+            <p class="count"> Số công việc: 0 </p>
+            <button class="ClearAll">Clear All</button>
+        </div>
+    </div>
+
+    <script>
+       $(document).ready(function(){
+        let count = 0;
+
+        //Khi nhấn nút thêm
+        $(".add").click(function(){
+            //Tạo biến value
+            let value = $(".cv").val();
+
+            //Nếu giá trị trong khung cv rỗng
+            if(value=="")
+            {
+                alert("Khung đang trống, vui lòng nhập công việc!");
+                return;
+            }
+
+            $(".list").css("display","block");
+
+            //Tạo khung mới
+            let khungds = $("<div class='khungds'></div>");     
+            let text = $("<span></span>").text(value);
+
+            //Nút xóa
+            let de = $("<button class='de'>🗑️</button>");
+
+            khungds.append(text);
+            khungds.append(de);
+
+            $(".list").append(khungds);
+
+            $(".cv").val("");
+
+            //Đếm số công việc
+            count++;
+            $(".count").text("Số công việc: "+count);
+
+            //Xóa từng khung riêng
+            de.on("click", function(){
+                let yes = confirm("Bạn có chắc chắn muốn xóa?");
+                if(yes)
+                {
+                    khungds.remove();
+
+                    //Giảm số lượng khi xóa
+                    count--;
+                    $(".count").text("Số công việc: "+count);
+                }
+            });
+        });
+        
+          //Xóa toàn bộ
+          $(".ClearAll").click(function(){
+            let yes = confirm("Bạn có chắc chắn muốn xóa hết toàn bộ?");
+            if(yes){
+                $(".khungds").remove();
+                count = 0;
+                $(".count").text("Số công việc: "+count);
+            }
+           });
+    });
+    </script>
+</body>
+
+</html>
