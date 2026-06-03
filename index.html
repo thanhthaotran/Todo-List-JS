@@ -158,10 +158,12 @@
     }
 
     // ================= HÀM XÓA 01 CV TRONG KHUNGDS =================
-    function remove(i){
-        data.splice(i,1);
-        save();
-        render();
+   function remove(i){
+        if(confirm("Chắc chắn muốn xóa công việc này không?")){
+            data.splice(i, 1);
+            save();
+            render();
+        }
     }
 
     // ================= HÀM XÓA TOÀN BỘ DL =================
