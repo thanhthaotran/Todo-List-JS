@@ -1,208 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách công việc</title>
+<meta charset="UTF-8">
+<title>Todo-List-Js</title>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<style>
+    body{
+        background:pink;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        height:100vh;
+    }
 
-    <style>
-        body{
-             /*Cho khung vào giữa*/
-            background-color: pink;
-            display:flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        
-        .khung{
-            width: 350px;
-            padding:10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-            background-color: white;
-            border-radius: 15px;
-        }
+    .box{
+        background:white;
+        padding:20px;
+        width:350px;
+        border-radius:12px;
+        box-shadow: 0 16px 18px rgb(0,0,0,0.2);
+    }
 
-        .tieude{
-            font-size: 30px;
-            font-weight: bold;
-            text-align: center;
-        }
+    .khungcv{
+        width:75%;
+        padding:10px;
+        border-radius: 10px;
+        border: 1px solid grey;
+    }
 
-        .add{
-            width: 200px;
-            padding:10px;
-            border-radius: 15px;
-            background-color: white;
-            color:black;
-        }
 
-        button.add{
-            width:50px;
-            padding: 10px;
-            border-radius: 15px;
-            background-color: pink;
-            border:none;
-            cursor: pointer;
-        }
+    /*remove*/
+    button.remove{
+        padding:10px;
+        cursor:pointer;
+        border-radius: 10px;
+        border:none;
+        background-color: white;
+    }
 
-        button.add:hover{
-            background-color: white;
-            font-weight: bold;
-        }
+    button.remove:hover{
+        /*Tạo hiệu ứng bóng đổ*/
+        transform: translateY(-5px);
+        box-shadow: 0 8px black;
+    }
 
-        .cv{
-            width:250px;
-            padding: 10px;
-            border-radius: 15px;
-        }
+    .khungds{
+        display:flex;
+        justify-content:space-between;
+        margin-top:10px;
+        background:pink;
+        padding:8px;
+        border-radius:8px;
+    }
 
-        .khung2{
-            display:flex;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-        }
+    .box_2{
+        display:flex;
+        gap:10px
+    }
 
-        .khung3{
-            display:flex;
-            gap: 10px;
-        }
+    /*clearAll*/
+    button.clearAll{
+        padding:10px;
+        cursor:pointer;
+        border-radius: 10px;
+        border:none;
+        background-color: pink;
+        margin-top:10px;
+        margin-left:170px
+    }
 
-        .list{
-            display:flex;
-            flex-direction:column;
-            gap:10px;   
-        }
+    button.clearAll:hover{
+        /*Tạo hiệu ứng bóng đổ*/
+        transform: translateY(-5px);
+        box-shadow: 0 8px black;
+    }
 
-        .khungds{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            background:pink;
-            padding:10px;
-            border-radius:10px;
-            margin-top:10px;
-            width:310px;
-            margin-left:10px;
-        }
+    /*add*/
+    button.add{
+        padding:10px;
+        cursor:pointer;
+        border-radius: 10px;
+        border:none;
+        background-color: pink;
+        width:50px;
+        margin-left:10px
+    }
 
-        button.de{
-            border:none;
-            cursor: pointer;
-            border-radius: 15px;
-            padding:5px;
-            font-size:16px;
-        }
+    button.add:hover{
+        /*Tạo hiệu ứng bóng đổ*/
+        transform: translateY(-5px);
+        box-shadow: 0 8px black;
+    }
 
-        button.de:hover{
-            background-color: pink;
-            font-weight: bold;
-        }
-
-        p{
-            margin-left:10px
-        }
-
-        button.ClearAll{
-            border:none;
-            cursor: pointer;
-            border-radius: 15px;
-            margin-top:10px;
-            padding:10px;
-            margin-left:150px;
-            background-color: pink;
-            cursor: pointer;
-        }
-
-        button.ClearAll:hover{
-            background-color: white;
-            font-weight: bold;
-        }
-
-    </style>
+    /*Tieude*/
+    .tieude{
+        text-align: center;
+        font-size: 30px;
+    }
+</style>
 </head>
 
-
 <body>
-    <div class="khung">
-        <p class="tieude"> Todo List </p>
-        <div class="khung2">
-            <input type="text" class="cv" placeholder="Nhập tên công việc">
-            <button class="add">+</button>
-        </div>
 
-        <div class="list"> </div>
+<div class="box">
+    <h2 class="tieude">Todo_List</h2>
 
-        <div class="khung3">
-            <p class="count"> Số công việc: 0 </p>
-            <button class="ClearAll">Clear All</button>
-        </div>
+    <input id="cv" class="khungcv" placeholder="Nhập công việc">
+    <button class="add" onclick="add()">+</button>
+
+    <div id="list"></div>
+
+    <div class="box_2">
+        <p>Số công việc: <span id="count">0</span></p>
+
+        <button class="clearAll" onclick="clearAll()">Clear All</button>
     </div>
+</div>
 
-    <script>
-       $(document).ready(function(){
-        let count = 0;
+<script>
+    // ================= TẠO MẢNG DATA ĐỂ CHỨA DL =================
+    let data = JSON.parse(localStorage.getItem("todo")) || [];
 
-        //Khi nhấn nút thêm
-        $(".add").click(function(){
-            //Tạo biến value
-            let value = $(".cv").val();
+    // ================= HÀM LƯU DL (KHÔNG XÓA KHI RELOAD TRANG) =================
+    function save(){
+        localStorage.setItem("todo", JSON.stringify(data));
+    }
 
-            //Nếu giá trị trong khung cv rỗng
-            if(value=="")
-            {
-                alert("Khung đang trống, vui lòng nhập công việc!");
-                return;
-            }
-
-            $(".list").css("display","block");
-
-            //Tạo khung mới
-            let khungds = $("<div class='khungds'></div>");     
-            let text = $("<span></span>").text(value);
-
-            //Nút xóa
-            let de = $("<button class='de'>🗑️</button>");
-
-            khungds.append(text);
-            khungds.append(de);
-
-            $(".list").append(khungds);
-
-            $(".cv").val("");
-
-            //Đếm số công việc
-            count++;
-            $(".count").text("Số công việc: "+count);
-
-            //Xóa từng khung riêng
-            de.on("click", function(){
-                let yes = confirm("Bạn có chắc chắn muốn xóa?");
-                if(yes)
-                {
-                    khungds.remove();
-
-                    //Giảm số lượng khi xóa
-                    count--;
-                    $(".count").text("Số công việc: "+count);
-                }
-            });
+    // ================= HÀM XÓA DL =================
+    function render(){
+        let list = document.getElementById("list");
+        let count = document.getElementById("count");
+        list.innerHTML = "";
+        data.forEach((khungds, i) => {
+            list.innerHTML += `
+                <div class="khungds">
+                    <span>${khungds}</span>
+                    <button class="remove" onclick="remove(${i})">🗑️</button>
+                </div>
+            `;
         });
-        
-          //Xóa toàn bộ
-          $(".ClearAll").click(function(){
-            let yes = confirm("Bạn có chắc chắn muốn xóa hết toàn bộ?");
-            if(yes){
-                $(".khungds").remove();
-                count = 0;
-                $(".count").text("Số công việc: "+count);
-            }
-           });
-    });
-    </script>
-</body>
+        count.innerText = data.length;
+        list.style.display = data.length ? "block" : "none";
+    }
 
+    // ================= HÀM THÊM DL =================
+    function add(){
+        let cv = document.getElementById("cv");
+        if(!cv.value.trim()){
+            alert("Nhập công việc!");
+            return;
+        }
+        data.push(cv.value);
+        cv.value = "";
+
+        save();
+        render();
+    }
+
+    // ================= HÀM XÓA 01 CV TRONG KHUNGDS =================
+    function remove(i){
+        data.splice(i,1);
+        save();
+        render();
+    }
+
+    // ================= HÀM XÓA TOÀN BỘ DL =================
+    function clearAll(){
+        if(confirm("Xóa hết công việc?")){
+            data = [];
+            save();
+            render();
+        }
+    }
+    render();
+</script>
+</body>
 </html>
